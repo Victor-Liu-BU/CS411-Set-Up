@@ -1,0 +1,24 @@
+Formal Requirements: SnickerSync
+Goal:
+To evaluate user engagement and efficiency when using the SnickerSync diff tool compared to traditional diff tools.
+Non-goal:
+To replace or deprecate existing diff tools in the GiggleGit ecosystem.
+Non-functional requirements:
+Security and Access Control:
+The SnickerSync tool must enforce role-based access control to ensure that only authorized personnel can access and modify core snickering concepts and user study data.
+Randomized User Assignment:
+The system must support randomized assignment of users to control groups and variant groups for unbiased user studies.
+Functional requirements:
+For Security and Access Control:
+1.1 User Authentication:
+The system shall require users to authenticate using their GiggleGit credentials before accessing the SnickerSync tool.
+1.2 Role-based Permissions:
+The system shall provide different levels of access based on user roles:
+Regular users can only use the SnickerSync tool for diff operations
+PMs have additional permissions to modify snickering concepts
+Researchers have access to anonymized user study data
+For Randomized User Assignment:
+2.1 Automatic Group Assignment:
+Upon a user's first interaction with SnickerSync, the system shall automatically assign the user to either a control group (using the vanilla interface) or a variant group (using the SnickerSync interface) using a randomization algorithm.
+2.2 Group Tracking:
+The system shall maintain a record of each user's group assignment (control or variant) throughout the duration of the user study, ensuring consistent experiences across multiple sessions.
