@@ -72,46 +72,50 @@ create_meal() {
     fi
 }
 
-delete_meal() {
-    meal_id=$1
-    echo "Deleting meal with ID: $meal_id..."
-    curl -s -X DELETE "$BASE_URL/delete-meal/$meal_id" | grep -q '"status": "success"'
-    if [ $? -eq 0 ]; then
-        echo "Meal deleted successfully."
-    else
-        echo "Failed to delete meal."
-        exit 1
-    fi
+delete_meal_by_id() {
+  meal_id=$1
+
+  echo "Deleting meal by ID ($meal_id)..."
+  response=$(curl -s -X DELETE "$BASE_URL/delete-meal/$meal_id")
+  if echo "$response" | grep -q '"status": "meal deleted"'; then
+    echo "Meal deleted successfully by ID ($meal_id)."
+  else
+    echo "Failed to delete meal by ID ($meal_id)."
+    exit 1
+  fi
 }
 
 get_meal_by_id() {
-    meal_id=$1
-    echo "Getting meal by ID: $meal_id..."
-    response=$(curl -s -X GET "$BASE_URL/get-meal-by-id/$meal_id")
-    if echo "$response" | grep -q '"status": "success"'; then
-        echo "Meal retrieved successfully."
-        if [ "$ECHO_JSON" = true ]; then
-            echo "Meal JSON:"
-            echo "$response" | jq .
-        fi
-    else
-        echo "Failed to get meal."
-        exit 1
-    fi
-}
+  meal_id=$1
 
+  echo "Getting meal by ID ($meal_id)..."
+  response=$(curl -s -X GET "$BASE_URL/get-meal-by-id/$meal_id")
+  if echo "$response" | grep -q '"status": "success"'; then
+    echo "Meal retrieved successfully by ID ($meal_id)."
+    if [ "$ECHO_JSON" = true ]; then
+      echo "Meal JSON:"
+      echo "$response" | jq .
+    fi
+  else
+    echo "Failed to get meal by ID ($meal_id)."
+    exit 1
+  fi
+}
 get_meal_by_name() {
-    meal_name=$1
+    meal_name="$1"
+    encoded_name=$(echo "$meal_name" | sed 's/ /%20/g')
     echo "Getting meal by name: $meal_name..."
-    response=$(curl -s -X GET "$BASE_URL/get-meal-by-name/$meal_name")
+    response=$(curl -s -X GET "$BASE_URL/get-meal-by-name/$encoded_name")
+    echo "Raw response: $response"
     if echo "$response" | grep -q '"status": "success"'; then
         echo "Meal retrieved successfully."
         if [ "$ECHO_JSON" = true ]; then
             echo "Meal JSON:"
-            echo "$response" | jq .
+            echo "$response"
         fi
     else
-        echo "Failed to get meal."
+        echo "Failed to get meal. Response:"
+        echo "$response"
         exit 1
     fi
 }
